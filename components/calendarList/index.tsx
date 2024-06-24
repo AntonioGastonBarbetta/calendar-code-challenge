@@ -1,49 +1,66 @@
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import DateAndStatus from '../dateAndStatus';
 import CalendarCard from '../calendarCard';
+import React from 'react';
 
-export default function CalendarList({data }: {data: []}) {
+interface Vendor {
+  vendorName: string;
+  phoneNumber: string;
+  streetAddress: string;
+}
+
+interface Appointment {
+  scheduledDate: string;
+  status: string;
+  name: string;
+  vendor?: Vendor;
+  arrivalEndWindow?: string;
+  arrivalStartWindow?: string;
+}
+
+interface AppointmentByYear {
+  year: number;
+  month: string;
+  actions: Appointment[];
+}
+
+interface CalendarListProps {
+  data: AppointmentByYear[];
+}
+
+export default function CalendarList({ data }: CalendarListProps) {
   return (
-    <ScrollView >
-    {data.map((appointmentByYear:any, index) => 
-{     
-     return (
-      <View key={index}>
-     <Text style={styles.title}>{appointmentByYear.month} {appointmentByYear.year}</Text>
-
- { appointmentByYear.actions.length?   appointmentByYear.actions.map((appointment, index) =>
-{
-  return      <View key={index} style={styles.cardListLayout} >
-  <DateAndStatus scheduledDate={appointment.scheduledDate}  status={appointment.status}></DateAndStatus>
-  <CalendarCard 
-    title={appointment.name}
-    subtitle={appointment.vendor?appointment.vendor.vendorName:null}
-    phone={appointment.vendor? appointment.vendor.phoneNumber: null}
-    address={appointment.vendor? appointment.vendor.streetAddress:null}
-    status={appointment.status}
-    arrivalEndWindow={appointment.arrivalEndWindow? appointment.arrivalEndWindow:null}
-    arrivalStartWindow={appointment.arrivalStartWindow? appointment.arrivalStartWindow:null}>
-  </CalendarCard> 
-</View>
-} 
-): <View style={styles.noAppointments}>
-     <Text style={styles.noAppointmentsText}>  No Maintenance Scheduled
-     </Text>
-     </View>
+    <ScrollView>
+      {data.map((appointmentByYear, index) => {     
+        return (
+          <View key={index}>
+            <Text style={styles.title}>{appointmentByYear.month} {appointmentByYear.year}</Text>
+            {appointmentByYear.actions.length ? appointmentByYear.actions.map((appointment, index) => {
+              return (
+                <View key={index} style={styles.cardListLayout}>
+                  <DateAndStatus scheduledDate={appointment.scheduledDate} status={appointment.status}></DateAndStatus>
+                  <CalendarCard 
+                    title={appointment.name}
+                    subtitle={appointment.vendor ? appointment.vendor.vendorName : null}
+                    phone={appointment.vendor ? appointment.vendor.phoneNumber : null}
+                    address={appointment.vendor ? appointment.vendor.streetAddress : null}
+                    status={appointment.status}
+                    arrivalEndWindow={appointment.arrivalEndWindow ? appointment.arrivalEndWindow : null}
+                    arrivalStartWindow={appointment.arrivalStartWindow ? appointment.arrivalStartWindow : null}
+                  ></CalendarCard> 
+                </View>
+              )
+            }) : (
+              <View style={styles.noAppointments}>
+                <Text style={styles.noAppointmentsText}>No Maintenance Scheduled</Text>
+              </View>
+            )}
+          </View>
+        )
+      })}
+    </ScrollView>
+  );
 }
-
-
-      </View>
-
-      )
-      
-      }
-      )
-    }
-  </ScrollView>
-  )
-}
-
 
 const styles = StyleSheet.create({
   title: {
@@ -63,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   noAppointments: {
-    flex: 1 ,
+    flex: 1,
     justifyContent: 'center', 
     height: 44,
     borderRadius: 4,
