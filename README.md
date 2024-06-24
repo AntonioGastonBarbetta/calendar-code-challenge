@@ -1,4 +1,4 @@
-# Digs Calendar Code Challenge
+      # Digs Calendar Code Challenge
 
 This is the candaidate test for Digs UI developers. It is NOT pass/fail. It is intended to provide insight into the range of your skill set. Please do what you can.
 
